@@ -44,7 +44,6 @@ import java.util.Comparator
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
-import hugo.weaving.DebugLog
 import timber.log.Timber
 
 
@@ -233,7 +232,6 @@ class CameraConnectionFragment : Fragment() {
      * @param width  The width of available size for camera preview
      * @param height The height of available size for camera preview
      */
-    @DebugLog
     @SuppressLint("LongLogTag", "UseSparseArrays")
     private fun setUpCameraOutputs(width: Int, height: Int) {
         val activity = activity
@@ -311,7 +309,6 @@ class CameraConnectionFragment : Fragment() {
      * Opens the camera specified by [CameraConnectionFragment.cameraId].
      */
     @SuppressLint("LongLogTag")
-    @DebugLog
     private fun openCamera(width: Int, height: Int) {
         setUpCameraOutputs(width, height)
         configureTransform(width, height)
@@ -321,7 +318,7 @@ class CameraConnectionFragment : Fragment() {
             if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw RuntimeException("Time out waiting to lock camera opening.")
             }
-            if (ActivityCompat.checkSelfPermission(this.activity!!, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this.requireActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 Timber.tag(TAG).w("checkSelfPermission CAMERA")
             }
 
@@ -329,6 +326,7 @@ class CameraConnectionFragment : Fragment() {
             Timber.tag(TAG).d("open Camera")
         } catch (e: CameraAccessException) {
             Timber.tag(TAG).e("Exception!", e)
+            
         } catch (e: InterruptedException) {
             throw RuntimeException("Interrupted while trying to lock camera opening.", e)
         }
@@ -338,7 +336,6 @@ class CameraConnectionFragment : Fragment() {
     /**
      * Closes the current [CameraDevice].
      */
-    @DebugLog
     private fun closeCamera() {
         try {
             cameraOpenCloseLock.acquire()
@@ -366,7 +363,6 @@ class CameraConnectionFragment : Fragment() {
     /**
      * Starts a background thread and its [Handler].
      */
-    @DebugLog
     private fun startBackgroundThread() {
         backgroundThread = HandlerThread("ImageListener")
         backgroundThread!!.start()
@@ -381,7 +377,6 @@ class CameraConnectionFragment : Fragment() {
      * Stops the background thread and its [Handler].
      */
     @SuppressLint("LongLogTag")
-    @DebugLog
     private fun stopBackgroundThread() {
         backgroundThread!!.quitSafely()
         inferenceThread!!.quitSafely()
@@ -402,7 +397,6 @@ class CameraConnectionFragment : Fragment() {
      * Creates a new [CameraCaptureSession] for camera preview.
      */
     @SuppressLint("LongLogTag")
-    @DebugLog
     private fun createCameraPreviewSession() {
         try {
             val texture = textureView!!.surfaceTexture!!
@@ -477,7 +471,6 @@ class CameraConnectionFragment : Fragment() {
      * @param viewWidth  The width of `mTextureView`
      * @param viewHeight The height of `mTextureView`
      */
-    @DebugLog
     private fun configureTransform(viewWidth: Int, viewHeight: Int) {
         val activity = activity
 
@@ -579,7 +572,6 @@ class CameraConnectionFragment : Fragment() {
          * @return The optimal `Size`, or an arbitrary one if none were big enough
          */
         @SuppressLint("LongLogTag")
-        @DebugLog
         private fun chooseOptimalSize(
                 choices: Array<Size>, width: Int, height: Int, aspectRatio: Size): Size {
             // Collect the supported resolutions that are at least as big as the preview Surface

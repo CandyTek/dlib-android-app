@@ -36,7 +36,7 @@ import com.tzutalin.dlib.VisionDetRet
 import java.io.File
 import java.util.ArrayList
 
-import hugo.weaving.DebugLog
+// import hugo.weaving.DebugLog
 import timber.log.Timber
 
 
@@ -55,7 +55,6 @@ open class MainActivity : AppCompatActivity() {
 
     /* Checks if external storage is available for read and write */
     private val isExternalStorageWritable: Boolean
-        @DebugLog
         get() {
             val state = Environment.getExternalStorageState()
             return Environment.MEDIA_MOUNTED == state
@@ -63,7 +62,6 @@ open class MainActivity : AppCompatActivity() {
 
     /* Checks if external storage is available to at least read */
     private val isExternalStorageReadable: Boolean
-        @DebugLog
         get() {
             val state = Environment.getExternalStorageState()
             return Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state
@@ -107,7 +105,6 @@ open class MainActivity : AppCompatActivity() {
         Toast.makeText(this@MainActivity, getString(R.string.description_info), Toast.LENGTH_LONG).show()
     }
 
-    @DebugLog
     protected fun demoStaticImage() {
         if (mTestImgPath != null) {
             Timber.tag(TAG).d("demoStaticImage() launch a task to det")
@@ -257,7 +254,6 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    @DebugLog
     private fun drawRect(path: String, results: List<VisionDetRet>, color: Int): BitmapDrawable {
         val options = BitmapFactory.Options()
         options.inSampleSize = 1
@@ -312,7 +308,6 @@ open class MainActivity : AppCompatActivity() {
         return BitmapDrawable(resources, bm)
     }
 
-    @DebugLog
     private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int): Bitmap {
         return Bitmap.createScaledBitmap(bm, newWidth, newHeight, true)
     }
@@ -333,7 +328,6 @@ open class MainActivity : AppCompatActivity() {
          *
          * @param activity
          */
-        @DebugLog
         private fun verifyPermissions(activity: AppCompatActivity): Boolean {
             // Check if we have write permission
             val writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
